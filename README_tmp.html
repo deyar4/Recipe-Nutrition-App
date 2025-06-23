@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>README.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+html,footer,header{
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Custom MD PDF CSS
+ */
+html,footer,header{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+
+ }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///Users/deyar/Documents/projects/Recipe-Nutrition-App/R%3A%5C2.Travail%5C1.Enseignement%5CCours%5C_1.Outils%5C2.Developpement%5C1.SCSS%5Cmain.css" type="text/css"><link rel="stylesheet" href="file:///Users/deyar/Documents/projects/Recipe-Nutrition-App/D%3A%5Crdaros%5CCours%5C_1.Outils%5C2.Developpement%5C1.SCSS%5Cmain.css" type="text/css">
+</head>
+
+<body>
+    <h1 id="recipe-nutrition-backend-api">Recipe Nutrition Backend API</h1>
+<p>A Laravel-based REST API that manages recipes with ingredients and preparation steps. Nutritional values for entire recipes are automatically calculated by integrating a mock external Nutrition API.</p>
+<hr>
+<h2 id="%F0%9F%94%A7-setup">🔧 Setup</h2>
+<ol>
+<li><strong>Clone the repository and install dependencies:</strong><pre class="hljs"><code><div>git <span class="hljs-built_in">clone</span> &lt;your_repository_url&gt; recipe-app
+<span class="hljs-built_in">cd</span> recipe-app/recipe-app-backend 
+composer install
+</div></code></pre>
+</li>
+<li><strong>Configure Environment:</strong><br>
+Copy <code>.env.example</code> to <code>.env</code>.<br>
+Set your database connection (e.g., <code>DB_CONNECTION=sqlite</code> and <code>touch database/database.sqlite</code>).<br>
+Add the Nutrition API credentials (from the exercise prompt, not your actual username/password):<pre class="hljs"><code><div>NUTRITION_API_USERNAME=&quot;name&quot;
+NUTRITION_API_PASSWORD=&quot;password&quot;
+</div></code></pre>
+</li>
+<li><strong>Generate Application Key &amp; Run Migrations:</strong><pre class="hljs"><code><div>php artisan key:generate
+php artisan migrate
+</div></code></pre>
+</li>
+<li><strong>Start the Laravel development server:</strong><pre class="hljs"><code><div>php artisan serve
+</div></code></pre>
+The API will be available at <code>http://127.0.0.1:8000</code> (or similar).</li>
+</ol>
+<hr>
+<h2 id="%F0%9F%A7%AA-nutrition-api-integration-part-1">🧪 Nutrition API Integration (Part 1)</h2>
+<p>This part confirms interaction with the external mock Nutrition API.</p>
+<p><strong>Command:</strong></p>
+<pre class="hljs"><code><div>php artisan nutrition:<span class="hljs-built_in">test</span>
+</div></code></pre>
+<p><strong>Functionality:</strong><br>
+This Artisan command performs the following:</p>
+<ul>
+<li>Fetches and displays all existing ingredients from the external API.</li>
+<li>Searches for a specific ingredient (e.g., &quot;Apple&quot;).</li>
+<li><strong>POSTs two new ingredients:</strong> &quot;Dragon Fruit&quot; and &quot;Jackfruit&quot; to the external API.</li>
+<li>Confirms the successful addition of the new ingredients by searching for them.</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%8D%BD%EF%B8%8F-recipe-api-part-2">🍽️ Recipe API (Part 2)</h2>
+<p>These are the RESTful endpoints for managing recipes within this application.</p>
+<h3 id="post-apirecipes"><code>POST /api/recipes</code></h3>
+<p>Creates a new recipe, including its associated ingredients and steps.</p>
+<p><strong>Request Body (JSON Example):</strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"title"</span>: <span class="hljs-string">"Spicy Chicken Stir-fry"</span>,
+  <span class="hljs-attr">"ingredients"</span>: [
+    { <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Chicken Breast"</span>, <span class="hljs-attr">"quantity"</span>: <span class="hljs-number">300</span>, <span class="hljs-attr">"unit"</span>: <span class="hljs-string">"grams"</span> },
+    { <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Broccoli"</span>,       <span class="hljs-attr">"quantity"</span>: <span class="hljs-number">200</span>, <span class="hljs-attr">"unit"</span>: <span class="hljs-string">"grams"</span> },
+    { <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Soy Sauce"</span>,      <span class="hljs-attr">"quantity"</span>: <span class="hljs-number">50</span>,  <span class="hljs-attr">"unit"</span>: <span class="hljs-string">"ml"</span> }
+  ],
+  <span class="hljs-attr">"steps"</span>: [
+    { <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Cut chicken into pieces."</span>, <span class="hljs-attr">"order"</span>: <span class="hljs-number">1</span> },
+    { <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Stir-fry chicken and vegetables."</span>, <span class="hljs-attr">"order"</span>: <span class="hljs-number">2</span> },
+    { <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Add soy sauce and serve."</span>, <span class="hljs-attr">"order"</span>: <span class="hljs-number">3</span> }
+  ]
+}
+</div></code></pre>
+<h3 id="get-apirecipes"><code>GET /api/recipes</code></h3>
+<p>Returns a list of all recipe titles and their IDs.</p>
+<h3 id="get-apirecipesid"><code>GET /api/recipes/{id}</code></h3>
+<p>Returns a single recipe, including its full details (title, ingredients, steps) and the <strong>calculated total nutritional values</strong> (carbs, fat, protein) fetched from the external Nutrition API for each ingredient.</p>
+<h3 id="delete-apirecipesid"><code>DELETE /api/recipes/{id}</code></h3>
+<p>Deletes a recipe and all its associated ingredients and steps.</p>
+<hr>
+<h2 id="%F0%9F%92%A1-development-notes">💡 Development Notes</h2>
+<ul>
+<li><strong>External API Interaction:</strong> Laravel's <code>Http</code> facade is used to securely interact with the external Nutrition API, handling Basic Authentication. The <code>getNutritionData</code> helper method in <code>RecipeController</code> encapsulates this logic.</li>
+<li><strong>Nutrition Calculation:</strong> Total recipe nutrition is calculated dynamically in the <code>GET /api/recipes/{id}</code> endpoint. It iterates through the recipe's ingredients, fetches individual nutrition data from the external API, and sums them up. The quantity of each ingredient acts as a direct multiplier for its nutritional values.</li>
+<li><strong>Database Structure:</strong> Uses <code>Recipe</code>, <code>Ingredient</code> (for recipe-specific ingredients), and <code>Step</code> Eloquent models with defined <code>hasMany</code> and <code>belongsTo</code> relationships. <code>onDelete('cascade')</code> ensures related data is cleaned up on recipe deletion.</li>
+<li><strong>Validation:</strong> All incoming API requests are validated using Laravel's robust validation features.</li>
+<li><strong>Credentials:</strong> External API credentials are stored securely in the <code>.env</code> file and accessed via <code>env()</code>.</li>
+</ul>
+<hr>
+<h2 id="%E2%9C%85-features-completed-backend">✅ Features Completed (Backend)</h2>
+<ul>
+<li>Nutrition API integration (GET + POST)
+<ul>
+<li>Submitted &quot;Dragon Fruit&quot; and &quot;Jackfruit&quot;</li>
+</ul>
+</li>
+<li><code>Recipe</code>, <code>Ingredient</code>, <code>Step</code> models with migrations</li>
+<li><code>POST</code>, <code>GET</code>, <code>DELETE</code> recipe endpoints</li>
+<li>Nutrition auto-calculation on recipe retrieval (<code>GET /api/recipes/{id}</code>)</li>
+<li>Laravel validation, Eloquent relationships</li>
+<li>Credentials in <code>.env</code>, clean structure, PSR-4 compliance</li>
+</ul>
+<h2 id="%F0%9F%9A%80-recipe-nutrition-frontend-angular">🚀 Recipe Nutrition Frontend (Angular)</h2>
+<p>This is the Angular application that provides a user interface to interact with the Backend API.</p>
+<h3 id="%F0%9F%94%A7-frontend-setup">🔧 Frontend Setup</h3>
+<ol>
+<li><strong>Navigate to the frontend directory:</strong><pre class="hljs"><code><div><span class="hljs-built_in">cd</span> recipe-app/recipe-app-frontend
+</div></code></pre>
+</li>
+<li><strong>Install Node.js dependencies:</strong><pre class="hljs"><code><div>npm install
+</div></code></pre>
+</li>
+<li><strong>Ensure Tailwind CSS is initialized (if not already):</strong><pre class="hljs"><code><div>npx tailwindcss init
+</div></code></pre>
+<em>(This creates <code>tailwind.config.js</code> and <code>postcss.config.js</code> if they don't exist. Ensure <code>src/**/*.{html,ts}</code> is in <code>tailwind.config.js</code> content array, and <code>@tailwind</code> directives are in <code>src/styles.scss</code>)</em></li>
+<li><strong>Configure API URL:</strong><br>
+Verify <code>src/environments/environment.ts</code> has <code>apiUrl: 'http://127.0.0.1:8000/api'</code> (or your backend's actual API URL).</li>
+<li><strong>Start the Angular development server:</strong><pre class="hljs"><code><div>ng serve -o
+</div></code></pre>
+The frontend application will open in your browser, typically at <code>http://localhost:4200/</code>.</li>
+</ol>
+
+</body>
+
+</html>

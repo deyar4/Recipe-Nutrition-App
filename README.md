@@ -112,4 +112,31 @@ Deletes a recipe and all its associated ingredients and steps.
   * Nutrition auto-calculation on recipe retrieval (`GET /api/recipes/{id}`)
   * Laravel validation, Eloquent relationships
   * Credentials in `.env`, clean structure, PSR-4 compliance
-  
+
+ ## 🚀 Recipe Nutrition Frontend (Angular)
+
+This is the Angular application that provides a user interface to interact with the Backend API.
+
+### 🔧 Frontend Setup
+
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd recipe-app/recipe-app-frontend
+    ```
+2.  **Install Node.js dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Ensure Tailwind CSS is initialized (if not already):**
+    ```bash
+    npx tailwindcss init
+    ```
+    *(This creates `tailwind.config.js` and `postcss.config.js` if they don't exist. Ensure `src/**/*.{html,ts}` is in `tailwind.config.js` content array, and `@tailwind` directives are in `src/styles.scss`)*
+4.  **Configure API URL:**
+    Verify `src/environments/environment.ts` has `apiUrl: 'http://127.0.0.1:8000/api'` (or your backend's actual API URL).
+5.  **Start the Angular development server:**
+    ```bash
+    ng serve -o
+    ```
+    The frontend application will open in your browser, typically at `http://localhost:4200/`.
+ 
