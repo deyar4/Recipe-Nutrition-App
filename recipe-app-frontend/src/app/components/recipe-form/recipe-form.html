@@ -1,138 +1,128 @@
-<div class="min-h-screen bg-gray-900 text-gray-200 p-6 flex flex-col items-center">
-  <div class="w-full max-w-3xl bg-gray-800 rounded-xl shadow-2xl p-8 space-y-8 border border-gray-700">
-    <h1 class="text-5xl font-extrabold text-white text-center tracking-tight">
-      {{ isEditMode ? 'Edit Recipe' : 'Craft New Recipe' }}
-    </h1>
+<div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+  <h1 class="text-4xl font-extrabold text-gray-800 mb-8 text-center">
+    {{ isEditMode ? 'Edit Recipe' : 'Add New Recipe' }}
+  </h1>
 
-    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="space-y-6">
-
-      <div>
-        <label for="title" class="block text-gray-400 text-lg font-semibold mb-2">Recipe Title</label>
-        <input
-          id="title"
-          type="text"
-          formControlName="title"
-          class="w-full px-5 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-base"
-          [ngClass]="{'border-red-500 ring-red-500': recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched}"
-          placeholder="e.g., Savory Chicken & Mushroom"
-        >
-        <div *ngIf="recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched" class="text-red-400 text-sm mt-1">
-          Recipe title is required.
-        </div>
+  <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <!-- Title Input -->
+    <div>
+      <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Recipe Title</label>
+      <input id="title" type="text" formControlName="title"
+             class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+             [ngClass]="{'border-red-500 ring-red-500': recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched}"
+             placeholder="e.g., Delicious Pasta">
+      <div *ngIf="recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched" class="text-red-500 text-sm mt-1">
+        Title is required.
       </div>
+    </div>
 
-      <div class="border border-gray-700 rounded-lg p-6 bg-gray-700/50">
-        <h2 class="text-3xl font-bold text-white mb-5 tracking-tight">Ingredients</h2>
-        <div formArrayName="ingredients" class="space-y-4">
-          <div *ngFor="let ingredientControl of ingredients.controls; let i = index" [formGroupName]="i" class="flex flex-col md:flex-row gap-4 items-end bg-gray-700 rounded-lg p-4 shadow-inner">
-            <div class="flex-grow">
-              <label [for]="'ingredientName' + i" class="block text-gray-400 text-sm font-medium mb-1">Name</label>
-              <input
-                [id]="'ingredientName' + i"
-                type="text"
-                formControlName="name"
-                class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent text-sm"
-                [ngClass]="{'border-red-500 ring-red-500': ingredientControl.get('name')?.invalid && ingredientControl.get('name')?.touched}"
-                placeholder="e.g., Chicken Breast"
-              >
-              <div *ngIf="ingredientControl.get('name')?.invalid && ingredientControl.get('name')?.touched" class="text-red-400 text-xs mt-1">
-                Ingredient name is required.
-              </div>
+    <!-- Ingredients Section -->
+    <div class="border-t border-gray-200 pt-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Ingredients</h2>
+      <div formArrayName="ingredients" class="space-y-4">
+        <div *ngFor="let ingredientControl of ingredients.controls; let i = index" [formGroupName]="i"
+             class="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 bg-gray-50 p-4 rounded-lg border border-gray-200">
+          <div class="flex-grow">
+            <label [for]="'ingredientName' + i" class="block text-xs font-medium text-gray-500 mb-1">Name</label>
+            <input [id]="'ingredientName' + i" type="text" formControlName="ingredient_name"
+                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   [ngClass]="{'border-red-500 ring-red-500': ingredientControl.get('ingredient_name')?.invalid && ingredientControl.get('ingredient_name')?.touched}"
+                   placeholder="e.g., Chicken Breast">
+            <div *ngIf="ingredientControl.get('ingredient_name')?.invalid && ingredientControl.get('ingredient_name')?.touched" class="text-red-500 text-xs mt-1">
+              Ingredient name is required.
             </div>
-            <div class="w-24">
-              <label [for]="'ingredientQuantity' + i" class="block text-gray-400 text-sm font-medium mb-1">Qty</label>
-              <input
-                [id]="'ingredientQuantity' + i"
-                type="number"
-                formControlName="quantity"
-                class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent text-sm"
-                [ngClass]="{'border-red-500 ring-red-500': ingredientControl.get('quantity')?.invalid && ingredientControl.get('quantity')?.touched}"
-                placeholder="e.g., 200"
-              >
-              <div *ngIf="ingredientControl.get('quantity')?.invalid && ingredientControl.get('quantity')?.touched" class="text-red-400 text-xs mt-1">
-                Quantity required (&gt;0).
-              </div>
+          </div>
+          <div class="w-24">
+            <label [for]="'ingredientQuantity' + i" class="block text-xs font-medium text-gray-500 mb-1">Quantity</label>
+            <input [id]="'ingredientQuantity' + i" type="number" formControlName="quantity"
+                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   [ngClass]="{'border-red-500 ring-red-500': ingredientControl.get('quantity')?.invalid && ingredientControl.get('quantity')?.touched}"
+                   placeholder="e.g., 2">
+            <div *ngIf="ingredientControl.get('quantity')?.invalid && ingredientControl.get('quantity')?.touched" class="text-red-500 text-xs mt-1">
+              Valid quantity is required.
             </div>
-            <div class="w-24">
-              <label [for]="'ingredientUnit' + i" class="block text-gray-400 text-sm font-medium mb-1">Unit</label>
-              <input
-                [id]="'ingredientUnit' + i"
-                type="text"
-                formControlName="unit"
-                class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent text-sm"
-                placeholder="e.g., grams"
-              >
-            </div>
-            <button (click)="removeIngredient(i)" type="button" class="mt-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md shadow-sm transition duration-200 text-sm font-medium">
-              Remove
+          </div>
+          <div class="w-24">
+            <label [for]="'ingredientUnit' + i" class="block text-xs font-medium text-gray-500 mb-1">Unit (Optional)</label>
+            <input [id]="'ingredientUnit' + i" type="text" formControlName="unit"
+                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   placeholder="e.g., pcs, g, ml">
+          </div>
+          <div class="flex items-center justify-end sm:justify-start pt-6 sm:pt-0">
+            <button type="button" (click)="removeIngredient(i)"
+                    class="p-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm3 3a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
             </button>
           </div>
         </div>
-        <button (click)="addIngredient()" type="button" class="mt-6 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-          + Add Ingredient
-        </button>
-        <div *ngIf="ingredients.invalid && recipeForm.touched" class="text-red-400 text-sm mt-2 text-center">
-            At least one ingredient is required.
-        </div>
       </div>
+      <button type="button" (click)="addIngredient()"
+              class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition-colors duration-200">
+        Add Ingredient
+      </button>
+      <div *ngIf="ingredients.invalid && recipeForm.touched" class="text-red-500 text-sm mt-2">
+        At least one ingredient is required.
+      </div>
+    </div>
 
-      <div class="border border-gray-700 rounded-lg p-6 bg-gray-700/50">
-        <h2 class="text-3xl font-bold text-white mb-5 tracking-tight">Steps</h2>
-        <div formArrayName="steps" class="space-y-4">
-          <div *ngFor="let stepControl of steps.controls; let i = index" [formGroupName]="i" class="flex flex-col md:flex-row gap-4 items-end bg-gray-700 rounded-lg p-4 shadow-inner">
-            <div class="w-16">
-              <label [for]="'stepOrder' + i" class="block text-gray-400 text-sm font-medium mb-1">Order</label>
-              <input
-                [id]="'stepOrder' + i"
-                type="number"
-                formControlName="order"
-                class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent text-sm"
-                [ngClass]="{'border-red-500 ring-red-500': stepControl.get('order')?.invalid && stepControl.get('order')?.touched}"
-              >
-              <div *ngIf="stepControl.get('order')?.invalid && stepControl.get('order')?.touched" class="text-red-400 text-xs mt-1">
-                Order required (&gt;0).
-              </div>
+    <!-- Steps Section -->
+    <div class="border-t border-gray-200 pt-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Instructions (Steps)</h2>
+      <div formArrayName="steps" class="space-y-4">
+        <div *ngFor="let stepControl of steps.controls; let i = index" [formGroupName]="i"
+             class="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 bg-gray-50 p-4 rounded-lg border border-gray-200 items-start">
+          <div class="w-16">
+            <label [for]="'stepOrder' + i" class="block text-xs font-medium text-gray-500 mb-1">Order</label>
+            <input [id]="'stepOrder' + i" type="number" formControlName="order"
+                   class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   [ngClass]="{'border-red-500 ring-red-500': stepControl.get('order')?.invalid && stepControl.get('order')?.touched}">
+            <div *ngIf="stepControl.get('order')?.invalid && stepControl.get('order')?.touched" class="text-red-500 text-xs mt-1">
+              Order is required.
             </div>
-            <div class="flex-grow">
-              <label [for]="'stepDescription' + i" class="block text-gray-400 text-sm font-medium mb-1">Description</label>
-              <textarea
-                [id]="'stepDescription' + i"
-                formControlName="description"
-                rows="2"
-                class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent text-sm resize-y"
-                [ngClass]="{'border-red-500 ring-red-500': stepControl.get('description')?.invalid && stepControl.get('description')?.touched}"
-                placeholder="e.g., Preheat oven to 200°C."
-              ></textarea>
-              <div *ngIf="stepControl.get('description')?.invalid && stepControl.get('description')?.touched" class="text-red-400 text-xs mt-1">
-                Description is required.
-              </div>
+          </div>
+          <div class="flex-grow">
+            <label [for]="'stepDescription' + i" class="block text-xs font-medium text-gray-500 mb-1">Description</label>
+            <textarea [id]="'stepDescription' + i" formControlName="description" rows="3"
+                      class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      [ngClass]="{'border-red-500 ring-red-500': stepControl.get('description')?.invalid && stepControl.get('description')?.touched}"
+                      placeholder="e.g., Chop the vegetables"></textarea>
+            <div *ngIf="stepControl.get('description')?.invalid && stepControl.get('description')?.touched" class="text-red-500 text-xs mt-1">
+              Description is required.
             </div>
-            <button (click)="removeStep(i)" type="button" class="mt-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md shadow-sm transition duration-200 text-sm font-medium">
-              Remove
+          </div>
+          <div class="flex items-center justify-end sm:justify-start pt-6 sm:pt-0">
+            <button type="button" (click)="removeStep(i)"
+                    class="p-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1zm3 3a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
             </button>
           </div>
         </div>
-        <button (click)="addStep()" type="button" class="mt-6 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-          + Add Step
-        </button>
-        <div *ngIf="steps.invalid && recipeForm.touched" class="text-red-400 text-sm mt-2 text-center">
-          At least one step is required.
-        </div>
       </div>
+      <button type="button" (click)="addStep()"
+              class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition-colors duration-200">
+        Add Step
+      </button>
+      <div *ngIf="steps.invalid && recipeForm.touched" class="text-red-500 text-sm mt-2">
+        At least one step is required.
+      </div>
+    </div>
 
-      <div class="flex justify-between items-center mt-8">
-        <a routerLink="/recipes" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-          Cancel
-        </a>
-        <button
-          type="submit"
-          [disabled]="recipeForm.invalid"
-          class="px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold shadow-xl transition duration-300 ease-in-out transform hover:scale-105"
-          [ngClass]="{'opacity-50 cursor-not-allowed': recipeForm.invalid}"
-        >
-          {{ isEditMode ? 'Update Recipe' : 'Save Recipe' }}
-        </button>
-      </div>
-    </form>
-  </div>
+    <!-- Form Actions -->
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-6">
+      <button type="submit"
+              class="flex-1 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition-colors duration-200"
+              [ngClass]="{'opacity-50 cursor-not-allowed': recipeForm.invalid}"
+              [disabled]="recipeForm.invalid">
+        {{ isEditMode ? 'Update Recipe' : 'Create Recipe' }}
+      </button>
+      <button type="button" (click)="goToRecipes()"
+              class="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg shadow-md transition-colors duration-200">
+        Cancel
+      </button>
+    </div>
+  </form>
 </div>

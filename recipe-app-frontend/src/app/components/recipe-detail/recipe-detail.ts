@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common'; // FOR *ngIf, *ngFor, DecimalPipe, DatePipe etc.
+import { ActivatedRoute, Router, RouterModule } from '@angular/router'; // FOR routing and routerLink
+import { ReactiveFormsModule } from '@angular/forms'; // FOR reactive forms
+
 import { RecipeService } from '../../services/recipe';
-import { Recipe } from '../../models/recipe.model';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Recipe } from '../../models/recipe.model'; // Correct import for Recipe
+
 @Component({
   selector: 'app-recipe-detail',
-  templateUrl: './recipe-detail.html',
-  styleUrls: ['./recipe-detail.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule]
+  imports: [
+    CommonModule, // Provides NgIf, NgFor, DecimalPipe, DatePipe, etc.
+    RouterModule, // Provides routerLink
+    ReactiveFormsModule // Provides reactive forms directives
+  ],
+  templateUrl: './recipe-detail.html', // Ensure this matches your filename!
+  styleUrls: ['./recipe-detail.scss']
 })
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe | undefined;
@@ -19,7 +24,7 @@ export class RecipeDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router, // <--- CHANGED FROM private TO public
     private recipeService: RecipeService
   ) { }
 
@@ -27,7 +32,7 @@ export class RecipeDetailComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.loadRecipe(+id); // Convert string ID to number
+        this.loadRecipe(+id);
       } else {
         this.error = 'No recipe ID provided.';
         this.isLoading = false;
@@ -47,8 +52,8 @@ export class RecipeDetailComponent implements OnInit {
         console.error('Failed to load recipe details', err);
         this.error = 'Could not load recipe. It might have been deleted or does not exist.';
         this.isLoading = false;
-        // Optionally redirect to recipe list or show a persistent error
-        // this.router.navigate(['/recipes']);
+        alert(this.error);
+        this.router.navigate(['/recipes']);
       }
     });
   }
@@ -60,11 +65,11 @@ export class RecipeDetailComponent implements OnInit {
       this.recipeService.deleteRecipe(id).subscribe({
         next: () => {
           console.log('Recipe deleted successfully!');
-          this.router.navigate(['/recipes']); // Navigate back to the list
+          this.router.navigate(['/recipes']);
         },
         error: (err) => {
           console.error('Failed to delete recipe:', err);
-          // Show user-friendly error message
+          alert('Failed to delete recipe. Please try again.');
         }
       });
     }

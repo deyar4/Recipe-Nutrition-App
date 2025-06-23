@@ -1,34 +1,42 @@
-<div class="container mx-auto p-4">
-  <h1 class="text-4xl font-bold mb-6 text-gray-800">Your Recipes</h1>
+<h1 class="text-4xl font-extrabold text-gray-800 mb-8 text-center">Your Recipes</h1>
 
-  <div class="flex justify-end mb-4">
-    <a routerLink="/recipes/new" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
-      Add New Recipe
-    </a>
-  </div>
+<div *ngIf="recipes.length === 0" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-8" role="alert">
+  <p class="font-bold">No Recipes Found</p>
+  <p>Start by adding a new recipe using the "Add Recipe" link above!</p>
+</div>
 
-  <div *ngIf="recipes.length === 0" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg" role="alert">
-    <p class="font-bold">No Recipes Yet!</p>
-    <p>Start by adding your first delicious recipe.</p>
-  </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div *ngFor="let recipe of recipes" class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out overflow-hidden">
+    <div class="p-6">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-3">{{ recipe.title }}</h2>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let recipe of recipes" class="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-      <div class="p-6">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-3">{{ recipe.title }}</h2>
-        <div class="flex justify-between items-center mt-4">
-          <a [routerLink]="['/recipes', recipe.id]" class="text-blue-600 hover:text-blue-800 font-medium transition duration-300 ease-in-out">
-            View Details
-          </a>
-          <div class="space-x-2">
-            <a [routerLink]="['/recipes/edit', recipe.id]" class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-bold py-1.5 px-3 rounded-md transition duration-300 ease-in-out">
-              Edit
-            </a>
-            <button (click)="deleteRecipe(recipe.id)" class="bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-1.5 px-3 rounded-md transition duration-300 ease-in-out">
-              Delete
-            </button>
-          </div>
-        </div>
+      <!-- Total Nutrition Display (Fixed property name: 'nutrition') -->
+      <div *ngIf="recipe.nutrition" class="mb-4 text-sm text-gray-600">
+        <p class="font-medium text-gray-700">Total Nutrition:</p>
+        <ul class="list-disc list-inside ml-2">
+          <li>Carbs: {{ recipe.nutrition.carbs | number:'1.0-1' }}g</li>
+          <li>Fat: {{ recipe.nutrition.fat | number:'1.0-1' }}g</li>
+          <li>Protein: {{ recipe.nutrition.protein | number:'1.0-1' }}g</li>
+        </ul>
+      </div>
+
+      <p class="text-gray-500 text-sm mb-4">
+        Created: {{ recipe.created_at | date:'mediumDate' }}
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a [routerLink]="['/recipes', recipe.id]"
+           class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+          View Details
+        </a>
+        <a [routerLink]="['/recipes/edit', recipe.id]"
+           class="flex-1 text-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+          Edit
+        </a>
+        <button (click)="deleteRecipe(recipe.id)"
+                class="flex-1 text-center bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+          Delete
+        </button>
       </div>
     </div>
   </div>

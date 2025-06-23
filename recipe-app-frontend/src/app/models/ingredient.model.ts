@@ -1,9 +1,10 @@
 export interface Ingredient {
   id?: number;
-  name: string;
+  recipe_id?: number;
+  ingredient_name: string;
   quantity: number;
-  unit: string;
-  resolved_nutrition?: { 
+  unit?: string;
+  macros?: { 
     carbs: number;
     fat: number;
     protein: number;

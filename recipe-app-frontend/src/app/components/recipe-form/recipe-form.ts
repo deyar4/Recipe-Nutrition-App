@@ -1,24 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+
 import { RecipeService } from '../../services/recipe';
 import { Recipe } from '../../models/recipe.model';
-import { debounceTime } from 'rxjs/operators'; // For local storage persistence
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Ingredient } from '../../models/ingredient.model';
+import { Step } from '../../models/step.model';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-recipe-form',
-  templateUrl: './recipe-form.html',
-  styleUrls: ['./recipe-form.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule
+  ],
+  templateUrl: './recipe-form.html',
+  styleUrls: ['./recipe-form.scss']
 })
 export class RecipeFormComponent implements OnInit {
   recipeForm!: FormGroup;
   isEditMode = false;
   recipeId: number | null = null;
-  private localStorageKey = 'recipeFormDraft'; // Key for local storage
+  private localStorageKey = 'recipeFormDraft';
 
   constructor(
     private fb: FormBuilder,
@@ -41,31 +47,31 @@ export class RecipeFormComponent implements OnInit {
         this.recipeId = +id;
         this.loadRecipe(this.recipeId);
       } else {
-        // Only load from local storage if not in edit mode (new recipe)
         this.loadFormFromLocalStorage();
       }
     });
 
-    // Save form data to local storage on changes (debounce to avoid too many writes)
     this.recipeForm.valueChanges.pipe(
-      debounceTime(500) // Wait 500ms after last change
+      debounceTime(500)
     ).subscribe(value => {
-      if (!this.isEditMode) { // Only persist drafts for new recipes
+      if (!this.isEditMode) {
         localStorage.setItem(this.localStorageKey, JSON.stringify(value));
       }
     });
   }
 
-  // --- Local Storage Persistence ---
   private loadFormFromLocalStorage(): void {
     const savedData = localStorage.getItem(this.localStorageKey);
     if (savedData) {
       const formData = JSON.parse(savedData);
       this.recipeForm.patchValue({ title: formData.title });
 
-      // Rebuild FormArrays for ingredients and steps
-      formData.ingredients.forEach((ing: any) => this.addIngredient(ing.name, ing.quantity, ing.unit));
-      formData.steps.forEach((step: any) => this.addStep(step.description, step.order));
+      this.ingredients.clear();
+      // FIXED: Use ingredient.ingredient_name from the loaded data
+      formData.ingredients.forEach((ing: Ingredient) => this.addIngredient(ing.ingredient_name, ing.quantity, ing.unit));
+
+      this.steps.clear();
+      formData.steps.forEach((step: Step) => this.addStep(step.description, step.order));
     }
   }
 
@@ -73,34 +79,28 @@ export class RecipeFormComponent implements OnInit {
     localStorage.removeItem(this.localStorageKey);
   }
 
-  // --- Load Recipe for Edit Mode ---
   loadRecipe(id: number): void {
     this.recipeService.getRecipeById(id).subscribe({
       next: (recipe: Recipe) => {
         this.recipeForm.patchValue({ title: recipe.title });
 
-        // Clear existing form arrays before populating
         this.ingredients.clear();
+        // FIXED: Use ingredient.ingredient_name when loading recipe for edit
+        recipe.ingredients.forEach(ing => this.addIngredient(ing.ingredient_name, ing.quantity, ing.unit));
+
         this.steps.clear();
-
-        // Populate ingredients
-        recipe.ingredients.forEach(ing => this.addIngredient(ing.name, ing.quantity, ing.unit));
-
-        // Populate steps
         recipe.steps.forEach(step => this.addStep(step.description, step.order));
 
-        // Remove any draft in local storage if we successfully loaded for edit
         this.clearLocalStorage();
       },
       error: (err) => {
         console.error('Failed to load recipe for editing', err);
-        // Redirect or show error message
+        alert('Could not load recipe for editing. It might have been deleted.');
         this.router.navigate(['/recipes']);
       }
     });
   }
 
-  // --- FormArray Getters ---
   get ingredients(): FormArray {
     return this.recipeForm.get('ingredients') as FormArray;
   }
@@ -109,10 +109,10 @@ export class RecipeFormComponent implements OnInit {
     return this.recipeForm.get('steps') as FormArray;
   }
 
-  // --- Dynamic Ingredient Methods ---
+  // FIXED: The 'name' parameter for newIngredient now refers to ingredient_name
   newIngredient(name: string = '', quantity: number = 0, unit: string = ''): FormGroup {
     return this.fb.group({
-      name: [name, Validators.required],
+      ingredient_name: [name, Validators.required], // Ensure this matches model
       quantity: [quantity, [Validators.required, Validators.min(1)]],
       unit: [unit]
     });
@@ -126,7 +126,6 @@ export class RecipeFormComponent implements OnInit {
     this.ingredients.removeAt(index);
   }
 
-  // --- Dynamic Step Methods ---
   newStep(description: string = '', order: number = this.steps.length + 1): FormGroup {
     return this.fb.group({
       description: [description, Validators.required],
@@ -142,11 +141,11 @@ export class RecipeFormComponent implements OnInit {
     this.steps.removeAt(index);
   }
 
-  // --- Form Submission ---
   onSubmit(): void {
     if (this.recipeForm.invalid) {
-      this.recipeForm.markAllAsTouched(); // Show validation errors
+      this.recipeForm.markAllAsTouched();
       console.error('Form is invalid', this.recipeForm.value);
+      alert('Please fill out all required fields correctly.');
       return;
     }
 
@@ -156,26 +155,30 @@ export class RecipeFormComponent implements OnInit {
       this.recipeService.updateRecipe(this.recipeId, recipe).subscribe({
         next: (res) => {
           console.log('Recipe updated!', res);
-          this.clearLocalStorage(); // Clear draft on successful submission
-          this.router.navigate(['/recipes', this.recipeId]); // Go to detail page
+          this.clearLocalStorage();
+          this.router.navigate(['/recipes', this.recipeId]);
         },
         error: (err) => {
           console.error('Error updating recipe:', err);
-          // Show user friendly error message
+          alert('Failed to update recipe. Please try again.');
         }
       });
     } else {
       this.recipeService.createRecipe(recipe).subscribe({
         next: (res) => {
           console.log('Recipe created!', res);
-          this.clearLocalStorage(); // Clear draft on successful submission
-          this.router.navigate(['/recipes', res.id]); // Go to new recipe's detail page
+          this.clearLocalStorage();
+          this.router.navigate(['/recipes', res.id]);
         },
         error: (err) => {
           console.error('Error creating recipe:', err);
-          // Show user friendly error message
+          alert('Failed to create recipe. Please try again.');
         }
       });
     }
+  }
+
+  public goToRecipes() {
+    this.router.navigate(['/recipes']);
   }
 }

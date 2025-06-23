@@ -1,70 +1,77 @@
-<div class="min-h-screen bg-gray-900 text-gray-200 p-6 flex flex-col items-center">
-  <div class="w-full max-w-4xl bg-gray-800 rounded-xl shadow-2xl p-8 space-y-8 border border-gray-700">
+<div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+  <div *ngIf="isLoading" class="text-center text-xl text-blue-500 font-semibold py-8">
+    Loading Recipe Details...
+  </div>
 
-    <div *ngIf="isLoading" class="text-center text-xl text-blue-400">Loading recipe details...</div>
-    <div *ngIf="error" class="bg-red-700 text-white p-4 rounded-lg text-center">{{ error }}</div>
+  <div *ngIf="error" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md mb-8" role="alert">
+    <p class="font-bold">Error Loading Recipe</p>
+    <p>{{ error }}</p>
+    <button (click)="router.navigate(['/recipes'])" class="mt-2 text-sm text-red-700 hover:underline">Go back to recipes</button>
+  </div>
 
-    <div *ngIf="recipe">
-      <h1 class="text-5xl font-extrabold text-white text-center mb-8 tracking-tight">{{ recipe.title }}</h1>
+  <div *ngIf="recipe">
+    <h1 class="text-4xl font-extrabold text-gray-800 mb-6 text-center tracking-tight">{{ recipe.title }}</h1>
 
-      <div class="flex justify-center md:justify-end gap-4 mb-8">
-        <a [routerLink]="['/recipes/edit', recipe.id]" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-          Edit Recipe
-        </a>
-        <button (click)="deleteRecipe(recipe.id)" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-          Delete Recipe
-        </button>
-        <a routerLink="/recipes" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-          Back to List
-        </a>
-      </div>
+    <div class="flex justify-center items-center space-x-4 mb-8">
+      <a [routerLink]="['/recipes/edit', recipe.id]"
+         class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-colors duration-200">
+        Edit Recipe
+      </a>
+      <button (click)="deleteRecipe(recipe.id)"
+              class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md transition-colors duration-200">
+        Delete Recipe
+      </button>
+      <a routerLink="/recipes" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg shadow-md transition-colors duration-200">
+        Back to List
+      </a>
+    </div>
 
-      <div *ngIf="recipe.total_nutrition" class="bg-gradient-to-r from-blue-700 to-indigo-700 rounded-lg p-6 shadow-xl mb-8 border border-blue-600">
-        <h2 class="text-3xl font-bold text-white mb-4 text-center">Total Nutritional Values</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-          <div>
-            <p class="text-xl font-semibold text-blue-200">Carbs</p>
-            <p class="text-4xl font-extrabold text-white">{{ recipe.total_nutrition.carbs | number:'1.0-1' }}g</p>
-          </div>
-          <div>
-            <p class="text-xl font-semibold text-blue-200">Fat</p>
-            <p class="text-4xl font-extrabold text-white">{{ recipe.total_nutrition.fat | number:'1.0-1' }}g</p>
-          </div>
-          <div>
-            <p class="text-xl font-semibold text-blue-200">Protein</p>
-            <p class="text-4xl font-extrabold text-white">{{ recipe.total_nutrition.protein | number:'1.0-1' }}g</p>
-          </div>
+    <!-- Total Nutrition Section (Using 'nutrition' instead of 'total_nutrition') -->
+    <div *ngIf="recipe.nutrition" class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-lg mb-8 shadow-inner">
+      <h2 class="text-2xl font-bold mb-4">Total Nutrition</h2>
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div>
+          <p class="text-lg font-semibold">Carbs</p>
+          <p class="text-3xl font-bold">{{ recipe.nutrition.carbs | number:'1.0-1' }}<span class="text-xl">g</span></p>
         </div>
-        <p class="text-center text-gray-300 text-sm mt-4">
-          Nutritional values are calculated based on available data from the external API.
-          Missing data will be treated as 0.
-        </p>
+        <div>
+          <p class="text-lg font-semibold">Fat</p>
+          <p class="text-3xl font-bold">{{ recipe.nutrition.fat | number:'1.0-1' }}<span class="text-xl">g</span></p>
+        </div>
+        <div>
+          <p class="text-lg font-semibold">Protein</p>
+          <p class="text-3xl font-bold">{{ recipe.nutrition.protein | number:'1.0-1' }}<span class="text-xl">g</span></p>
+        </div>
       </div>
+    </div>
 
-      <div class="bg-gray-700 rounded-lg p-6 shadow-md mb-8 border border-gray-600">
-        <h2 class="text-3xl font-bold text-white mb-4">Ingredients</h2>
-        <ul class="list-disc list-inside space-y-3">
-          <li *ngFor="let ingredient of recipe.ingredients" class="text-gray-300 text-lg">
-            <span class="font-semibold text-white">{{ ingredient.quantity }} {{ ingredient.unit }}</span> of {{ ingredient.name }}
-            <span *ngIf="ingredient.resolved_nutrition && (ingredient.resolved_nutrition.carbs !== 0 || ingredient.resolved_nutrition.fat !== 0 || ingredient.resolved_nutrition.protein !== 0)" class="text-sm text-gray-400 ml-2">
-              (C:{{ ingredient.resolved_nutrition.carbs | number:'1.0-1' }}g, F:{{ ingredient.resolved_nutrition.fat | number:'1.0-1' }}g, P:{{ ingredient.resolved_nutrition.protein | number:'1.0-1' }}g)
-            </span>
-            <span *ngIf="ingredient.resolved_nutrition?.note" class="text-sm text-red-400 ml-2">
-              ({{ ingredient.resolved_nutrition?.note }})
-            </span>
-          </li>
-        </ul>
-      </div>
+    <!-- Ingredients Section (Using 'ingredient_name' and 'macros') -->
+    <div class="mb-8">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b pb-2">Ingredients</h2>
+      <ul class="space-y-3">
+        <li *ngFor="let ingredient of recipe.ingredients" class="text-lg text-gray-700 bg-gray-50 p-3 rounded-md shadow-sm">
+          <span class="font-medium">{{ ingredient.quantity }}</span>
+          <span *ngIf="ingredient.unit" class="ml-1">{{ ingredient.unit }}</span>
+          <span class="ml-2 font-medium text-gray-900">{{ ingredient.ingredient_name }}</span> <!-- FIXED: ingredient.ingredient_name -->
+          <span *ngIf="ingredient.macros && (ingredient.macros.carbs !== null || ingredient.macros.fat !== null || ingredient.macros.protein !== null)"
+                class="text-sm text-gray-500 ml-3 italic">
+            (C:{{ ingredient.macros.carbs | number:'1.0-1' }}g, F:{{ ingredient.macros.fat | number:'1.0-1' }}g, P:{{ ingredient.macros.protein | number:'1.0-1' }}g)
+          </span>
+          <span *ngIf="ingredient.macros?.note" class="text-sm text-red-400 ml-2">
+            ({{ ingredient.macros?.note }})
+          </span>
+        </li>
+      </ul>
+    </div>
 
-      <div class="bg-gray-700 rounded-lg p-6 shadow-md border border-gray-600">
-        <h2 class="text-3xl font-bold text-white mb-4">Preparation Steps</h2>
-        <ol class="list-decimal list-inside space-y-3">
-          <li *ngFor="let step of recipe.steps" class="text-gray-300 text-lg">
-            <span class="font-semibold text-white">{{ step.description }}</span>
-          </li>
-        </ol>
-      </div>
-
+    <!-- Steps Section -->
+    <div>
+      <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b pb-2">Instructions</h2>
+      <ol class="space-y-3 list-decimal list-inside">
+        <li *ngFor="let step of recipe.steps" class="text-lg text-gray-700 bg-gray-50 p-3 rounded-md shadow-sm">
+          <span class="font-medium">Step {{ step.order }}:</span> {{ step.description }}
+        </li>
+      </ol>
     </div>
   </div>
 </div>
