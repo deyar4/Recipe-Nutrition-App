@@ -1,0 +1,70 @@
+<div class="min-h-screen bg-gray-900 text-gray-200 p-6 flex flex-col items-center">
+  <div class="w-full max-w-4xl bg-gray-800 rounded-xl shadow-2xl p-8 space-y-8 border border-gray-700">
+
+    <div *ngIf="isLoading" class="text-center text-xl text-blue-400">Loading recipe details...</div>
+    <div *ngIf="error" class="bg-red-700 text-white p-4 rounded-lg text-center">{{ error }}</div>
+
+    <div *ngIf="recipe">
+      <h1 class="text-5xl font-extrabold text-white text-center mb-8 tracking-tight">{{ recipe.title }}</h1>
+
+      <div class="flex justify-center md:justify-end gap-4 mb-8">
+        <a [routerLink]="['/recipes/edit', recipe.id]" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+          Edit Recipe
+        </a>
+        <button (click)="deleteRecipe(recipe.id)" class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+          Delete Recipe
+        </button>
+        <a routerLink="/recipes" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+          Back to List
+        </a>
+      </div>
+
+      <div *ngIf="recipe.total_nutrition" class="bg-gradient-to-r from-blue-700 to-indigo-700 rounded-lg p-6 shadow-xl mb-8 border border-blue-600">
+        <h2 class="text-3xl font-bold text-white mb-4 text-center">Total Nutritional Values</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+          <div>
+            <p class="text-xl font-semibold text-blue-200">Carbs</p>
+            <p class="text-4xl font-extrabold text-white">{{ recipe.total_nutrition.carbs | number:'1.0-1' }}g</p>
+          </div>
+          <div>
+            <p class="text-xl font-semibold text-blue-200">Fat</p>
+            <p class="text-4xl font-extrabold text-white">{{ recipe.total_nutrition.fat | number:'1.0-1' }}g</p>
+          </div>
+          <div>
+            <p class="text-xl font-semibold text-blue-200">Protein</p>
+            <p class="text-4xl font-extrabold text-white">{{ recipe.total_nutrition.protein | number:'1.0-1' }}g</p>
+          </div>
+        </div>
+        <p class="text-center text-gray-300 text-sm mt-4">
+          Nutritional values are calculated based on available data from the external API.
+          Missing data will be treated as 0.
+        </p>
+      </div>
+
+      <div class="bg-gray-700 rounded-lg p-6 shadow-md mb-8 border border-gray-600">
+        <h2 class="text-3xl font-bold text-white mb-4">Ingredients</h2>
+        <ul class="list-disc list-inside space-y-3">
+          <li *ngFor="let ingredient of recipe.ingredients" class="text-gray-300 text-lg">
+            <span class="font-semibold text-white">{{ ingredient.quantity }} {{ ingredient.unit }}</span> of {{ ingredient.name }}
+            <span *ngIf="ingredient.resolved_nutrition && (ingredient.resolved_nutrition.carbs !== 0 || ingredient.resolved_nutrition.fat !== 0 || ingredient.resolved_nutrition.protein !== 0)" class="text-sm text-gray-400 ml-2">
+              (C:{{ ingredient.resolved_nutrition.carbs | number:'1.0-1' }}g, F:{{ ingredient.resolved_nutrition.fat | number:'1.0-1' }}g, P:{{ ingredient.resolved_nutrition.protein | number:'1.0-1' }}g)
+            </span>
+            <span *ngIf="ingredient.resolved_nutrition?.note" class="text-sm text-red-400 ml-2">
+              ({{ ingredient.resolved_nutrition?.note }})
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-gray-700 rounded-lg p-6 shadow-md border border-gray-600">
+        <h2 class="text-3xl font-bold text-white mb-4">Preparation Steps</h2>
+        <ol class="list-decimal list-inside space-y-3">
+          <li *ngFor="let step of recipe.steps" class="text-gray-300 text-lg">
+            <span class="font-semibold text-white">{{ step.description }}</span>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="min-h-screen bg-gray-900 font-sans">
+  <nav class="bg-gray-800 p-4 shadow-lg sticky top-0 z-10 border-b border-gray-700">
+    <div class="container mx-auto flex justify-between items-center">
+      <a routerLink="/recipes" class="text-white text-2xl font-bold tracking-wide hover:text-blue-400 transition duration-300">
+        Recipe Hub
+      </a>
+      <div>
+        <a routerLink="/recipes" class="text-gray-300 hover:text-white px-4 py-2 rounded-md transition duration-300">Recipes</a>
+        <a routerLink="/recipes/new" class="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition duration-300">Add New</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="py-6">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="bg-gray-800 p-4 text-center text-gray-500 text-sm mt-auto border-t border-gray-700">
+    &copy; 2025 Recipe Nutrition App. Interview Test for FileHub.
+  </footer>
+</div>

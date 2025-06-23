@@ -1,0 +1,7 @@
+/* Remove @tailwind directives if not using Tailwind with PostCSS, or ensure Tailwind is properly configured */
+@import "tailwindcss";
+
+
+body {
+  font-family: 'Inter', sans-serif;
+}
