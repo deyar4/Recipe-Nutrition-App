@@ -3,10 +3,10 @@ export interface Ingredient {
   name: string;
   quantity: number;
   unit: string;
-  resolved_nutrition?: { // Optional field for nutrition API response
+  resolved_nutrition?: { 
     carbs: number;
     fat: number;
     protein: number;
-    note?: string; // e.g., "Ingredient not found"
+    note?: string; 
   };
 }

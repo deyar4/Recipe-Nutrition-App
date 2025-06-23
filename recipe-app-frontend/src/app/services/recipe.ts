@@ -17,18 +17,17 @@ export class RecipeService {
   }
 
   getRecipeById(id: number): Observable<Recipe> {
-    return this.http.get<Recipe>(`<span class="math-inline">\{this\.apiUrl\}/</span>{id}`);
+    return this.http.get<Recipe>(`${this.apiUrl}/${id}`);
   }
-
   createRecipe(recipe: Recipe): Observable<Recipe> {
     return this.http.post<Recipe>(this.apiUrl, recipe);
   }
 
   updateRecipe(id: number, recipe: Recipe): Observable<Recipe> {
-    return this.http.put<Recipe>(`<span class="math-inline">\{this\.apiUrl\}/</span>{id}`, recipe);
+    return this.http.put<Recipe>(`${this.apiUrl}/${id}`, recipe);
   }
 
   deleteRecipe(id: number): Observable<void> {
-    return this.http.delete<void>(`<span class="math-inline">\{this\.apiUrl\}/</span>{id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
